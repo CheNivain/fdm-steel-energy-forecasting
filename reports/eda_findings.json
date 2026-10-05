@@ -1,0 +1,55 @@
+{
+  "source_file": "Steel_industry_data.csv",
+  "source_sha256": "9b1cee6f9cb9cd9df2b95814ca90a9a2ff15b7f5f1fba0fae3c643e82072eacc",
+  "generated_utc": "2026-09-27T08:55:45.828210+00:00",
+  "timestamp_policy": "Literal day-first labels, sorted. Midnight rows not date-shifted; confirm convention before forecasting.",
+  "quality": {
+    "rows": 35040,
+    "columns": 11,
+    "missing_cells": 0,
+    "blank_string_cells": 0,
+    "exact_duplicate_rows": 0,
+    "invalid_dates": 0,
+    "duplicate_timestamps": 0,
+    "original_order_backward_steps": 365,
+    "missing_15_minute_timestamps": 0,
+    "off_grid_timestamps": 0,
+    "non_15_minute_steps_after_sort": 0,
+    "day_of_week_mismatches": 0,
+    "weekstatus_mismatches": 0,
+    "nsm_mismatches": 0,
+    "infinite_numeric_values": 0,
+    "negative_usage_values": 0,
+    "power_factor_values_outside_0_to_100": 0
+  },
+  "date_min": "2018-01-01T00:00:00",
+  "date_max": "2018-12-31T23:45:00",
+  "usage_mean_kwh": 27.386892408675802,
+  "usage_median_kwh": 4.57,
+  "usage_min_kwh": 0.0,
+  "usage_max_kwh": 157.18,
+  "usage_skewness": 1.1973938227692202,
+  "zero_usage_count": 1,
+  "iqr_lower_kwh": -68.85624999999999,
+  "iqr_upper_kwh": 123.29374999999999,
+  "iqr_flagged_count": 328,
+  "mean_kwh_by_load_type": {
+    "Light_Load": 8.626206839309429,
+    "Medium_Load": 38.44539397689769,
+    "Maximum_Load": 59.26531353135314
+  },
+  "mean_kwh_by_weekstatus": {
+    "Weekday": 33.62472701149425,
+    "Weekend": 11.73232672275641
+  },
+  "peak_mean_hour": 9,
+  "lowest_mean_hour": 6,
+  "co2_usage_pearson_r": 0.9881797716789519,
+  "models_trained": false,
+  "preprocessing_pipeline_completed": false,
+  "versions": {
+    "pandas": "2.2.3",
+    "numpy": "2.3.5",
+    "matplotlib": "3.11.2"
+  }
+}

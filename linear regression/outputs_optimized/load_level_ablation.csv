@@ -1,0 +1,3 @@
+model,split,n_rows,MAE_kWh,RMSE_kWh,R2
+"Selected, includes load_level",validation,5856,4.751610759482254,9.295672183854313,0.9113105581718819
+"Selected, without load_level",validation,5856,4.751098116064023,9.303032820713907,0.9111700477879506

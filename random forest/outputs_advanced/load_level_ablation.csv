@@ -1,0 +1,2 @@
+model,split,n_rows,MAE_kWh,RMSE_kWh,R2,HighLoad_MAE,high_load_rows
+Selected settings without load_level,last_cv_fold,4751,4.120120099906612,8.934139153656899,0.9154720478442655,11.357638552584248,1068

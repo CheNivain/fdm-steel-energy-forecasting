@@ -1,0 +1,54 @@
+1. What Is This Project?
+Imagine the factory manager asks:
+“How much electricity will our factory use during the next 15 minutes?”
+
+Our project tries to answer that question using the factory’s past energy readings.
+For example, it might predict 45 kWh for the next interval. Because we predict a number, this is called regression.
+2. What Is This Dataset?
+The dataset is like the factory’s electricity diary.
+It contains 35,040 records and 11 columns. Each record describes one 15-minute interval.
+It includes information such as:
+- The date and time.
+- How much energy the factory used.
+- The day of the week.
+- Other electrical measurements and a load category.
+The answer we want to predict is Usage_kWh, which means energy consumed during that interval.
+We create useful clues from the past readings, such as previous usage and average usage during the last hour.
+3. Which Models Did We Use?
+We used five different ways of learning from the data:
+Model	Very simple explanation
+Linear Regression	Learns how much each input matters, then combines those inputs into a prediction. Our improved version uses additional calculated features.
+Random Forest	Uses many decision trees. Each tree makes a prediction, and their answers are combined. Our version predicts the change from the previous usage.
+KNN	Finds similar situations in the past and uses their energy readings to predict the new situation.
+SVR	Learns a prediction pattern while allowing some small errors instead of trying to match every example perfectly.
+Gradient Boosting	Builds trees one after another. Each new tree tries to correct mistakes left by the earlier trees.
+
+
+Think of them as five different methods trying to answer the same question.
+4. What Results Did We Get?
+First, understand the columns:
+- MAE: Average size of the mistakes. Lower is better.
+- RMSE: An error measure that gives more importance to big mistakes. Lower is better.
+- R²: A score describing how well predictions fit the answers. Higher is better, but it is not percentage accuracy.
+- HighLoad_MAE: Average mistake during high-consumption intervals. Lower is better.
+Model	MAE	RMSE	R²	HighLoad_MAE
+Linear Regression	4.128	7.880	0.936	9.671
+Random Forest	3.645	7.735	0.938	9.515
+SVR	4.495	9.099	0.915	10.901
+KNN	4.317	9.185	0.887	26.187
+Gradient Boosting	3.303	6.872	0.937	19.127
+
+
+For example, Random Forest’s MAE of 3.645 means its prediction was wrong by about 3.645 kWh on average. Some mistakes were smaller; others were larger.
+Important: These are not all the same test. Your models and SVR use a 50 kWh high-load cutoff; KNN and Gradient Boosting use about 80 kWh, with fewer test records. Therefore, we cannot fairly rank all five using this table alone.
+5. Which Model Do We Select?
+Random Forest is our current working choice.
+Why?
+- It has better reported overall and high-load results than Linear Regression and SVR under their matching reported evaluation setup.
+- It performs well during heavy-consumption intervals, which matter to the proposed project.
+- Its saved model has been tested and successfully produces the recorded predictions.
+Why prioritise high-load error? A model might predict quiet periods well but make large mistakes when the factory uses lots of energy. HighLoad_MAE helps us focus on those important periods. We still check the other metrics.
+What you should say:
+“We selected Random Forest as our working model because it gives strong overall results and low error during high-consumption periods. However, we must test all five models using the same conditions before confirming the final winner.”
+
+One last distinction: the current models were tuned using RMSE. Making HighLoad_MAE the main selection criterion now requires an updated validation comparison.

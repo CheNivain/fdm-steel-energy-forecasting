@@ -1,0 +1,12 @@
+,dtype,missing,blank_strings,unique_values
+date,object,0,0,35040
+Usage_kWh,float64,0,0,3343
+Lagging_Current_Reactive.Power_kVarh,float64,0,0,1954
+Leading_Current_Reactive_Power_kVarh,float64,0,0,768
+CO2(tCO2),float64,0,0,8
+Lagging_Current_Power_Factor,float64,0,0,5079
+Leading_Current_Power_Factor,float64,0,0,3366
+NSM,int64,0,0,96
+WeekStatus,object,0,0,2
+Day_of_week,object,0,0,7
+Load_Type,object,0,0,3

@@ -1,0 +1,12 @@
+{
+  "algorithm": "Linear Regression",
+  "selected_specification": {
+    "knots": 5,
+    "schedule": "weekend",
+    "use_load": false
+  },
+  "selection_metric": "mean of five TimeSeriesSplit fold RMSE values; lowest wins",
+  "cv_RMSE_kWh": 9.912214142821773,
+  "cv_HighLoad_MAE": 12.344420644737657,
+  "test_used_for_selection": false
+}

@@ -1,0 +1,11 @@
+{
+  "reload_predictions_match": true,
+  "fitted_on_rows": 28511,
+  "test_rows": 5857,
+  "prediction_seconds_96_rows": 0.08198904199525714,
+  "model_size_bytes": 326280729,
+  "model_sha256": "861284d63c80b31af840333e893d92f7f3906ebe86633edfa2213e3f8d1257a2",
+  "source_sha256": "496c6c47789db332fc1397e9d3eb7619ddf24c141b58676e7855460ff192e510",
+  "load_level_independence_verified": true,
+  "compressed_reload_verified": true
+}

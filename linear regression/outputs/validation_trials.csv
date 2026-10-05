@@ -1,0 +1,2 @@
+model,split,n_rows,MAE_kWh,RMSE_kWh,R2
+Linear Regression,validation,5856,6.598907079922495,11.858554858818858,0.8556642689476606

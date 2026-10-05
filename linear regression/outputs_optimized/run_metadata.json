@@ -1,0 +1,148 @@
+{
+  "status": "trained",
+  "created_utc": "2026-10-02T07:20:50.464803+00:00",
+  "target": "Usage_kWh",
+  "horizon_minutes": 15,
+  "features": [
+    "tod_sin",
+    "tod_cos",
+    "dow_sin",
+    "dow_cos",
+    "is_weekend",
+    "load_level",
+    "lag_1",
+    "lag_4",
+    "lag_96",
+    "lag_672",
+    "roll_mean_4",
+    "roll_std_4",
+    "roll_mean_96",
+    "roll_max_96",
+    "diff_1"
+  ],
+  "validation_start": "2018-09-01 00:00:00",
+  "test_start": "2018-11-01 00:00:00",
+  "selection_metric": "validation RMSE_kWh (lower is better)",
+  "settings": {
+    "algorithm": "Linear Regression",
+    "learner": "LinearRegression",
+    "selected_specification": {
+      "feature_mode": "time96",
+      "basis": "spline",
+      "knots": 5
+    },
+    "selection_metric": "September-October validation RMSE_kWh",
+    "best_validation_RMSE_kWh": 9.295672183854313,
+    "test_used_for_selection": false,
+    "search_candidates": 18,
+    "postprocessing": "Predictions floored at zero for nonnegative energy consumption",
+    "raw_test_metrics": {
+      "model": "Linear Regression",
+      "split": "test_unclipped",
+      "n_rows": 5857,
+      "MAE_kWh": 4.31327682189584,
+      "RMSE_kWh": 8.117201302498108,
+      "R2": 0.9320203257584547
+    },
+    "negative_raw_test_predictions": 41,
+    "raw_input_features": 15,
+    "transformed_features": 461,
+    "final_fit_rows": 28511,
+    "final_fit_seconds": 0.5739102920051664,
+    "total_seconds_before_export": 5.576303791021928,
+    "seed": 42,
+    "walk_forward_note": "Retrospective robustness diagnostics; configuration selected using later Sep-Oct data.",
+    "ablation_note": "Diagnostic only; not a replacement selection or proof load category is known in advance."
+  },
+  "model_parameters": {
+    "estimator__memory": null,
+    "estimator__steps": [
+      [
+        "features",
+        "ForecastFeatures(mode='time96')"
+      ],
+      [
+        "basis",
+        "ColumnTransformer(remainder='passthrough',\n                  transformers=[('smooth',\n                                 SplineTransformer(extrapolation='linear',\n                                                   include_bias=False,\n                                                   knots='quantile'),\n                                 ['lag_1', 'lag_4', 'lag_96', 'lag_672',\n                                  'roll_mean_4', 'roll_std_4', 'roll_mean_96',\n                                  'roll_max_96', 'diff_1'])],\n                  verbose_feature_names_out=False)"
+      ],
+      [
+        "scaler",
+        "StandardScaler()"
+      ],
+      [
+        "regressor",
+        "LinearRegression()"
+      ]
+    ],
+    "estimator__transform_input": null,
+    "estimator__verbose": false,
+    "estimator__features": "ForecastFeatures(mode='time96')",
+    "estimator__basis": "ColumnTransformer(remainder='passthrough',\n                  transformers=[('smooth',\n                                 SplineTransformer(extrapolation='linear',\n                                                   include_bias=False,\n                                                   knots='quantile'),\n                                 ['lag_1', 'lag_4', 'lag_96', 'lag_672',\n                                  'roll_mean_4', 'roll_std_4', 'roll_mean_96',\n                                  'roll_max_96', 'diff_1'])],\n                  verbose_feature_names_out=False)",
+    "estimator__scaler": "StandardScaler()",
+    "estimator__regressor": "LinearRegression()",
+    "estimator__features__mode": "time96",
+    "estimator__features__use_load": true,
+    "estimator__basis__n_jobs": null,
+    "estimator__basis__remainder": "passthrough",
+    "estimator__basis__sparse_threshold": 0.3,
+    "estimator__basis__transformer_weights": null,
+    "estimator__basis__transformers": [
+      [
+        "smooth",
+        "SplineTransformer(extrapolation='linear', include_bias=False, knots='quantile')",
+        [
+          "lag_1",
+          "lag_4",
+          "lag_96",
+          "lag_672",
+          "roll_mean_4",
+          "roll_std_4",
+          "roll_mean_96",
+          "roll_max_96",
+          "diff_1"
+        ]
+      ]
+    ],
+    "estimator__basis__verbose": false,
+    "estimator__basis__verbose_feature_names_out": false,
+    "estimator__basis__smooth": "SplineTransformer(extrapolation='linear', include_bias=False, knots='quantile')",
+    "estimator__basis__smooth__degree": 3,
+    "estimator__basis__smooth__extrapolation": "linear",
+    "estimator__basis__smooth__handle_missing": "error",
+    "estimator__basis__smooth__include_bias": false,
+    "estimator__basis__smooth__knots": "quantile",
+    "estimator__basis__smooth__n_knots": 5,
+    "estimator__basis__smooth__order": "C",
+    "estimator__basis__smooth__sparse_output": false,
+    "estimator__scaler__copy": true,
+    "estimator__scaler__with_mean": true,
+    "estimator__scaler__with_std": true,
+    "estimator__regressor__copy_X": true,
+    "estimator__regressor__fit_intercept": true,
+    "estimator__regressor__n_jobs": null,
+    "estimator__regressor__positive": false,
+    "estimator__regressor__tol": 1e-06,
+    "estimator": "Pipeline(steps=[('features', ForecastFeatures(mode='time96')),\n                ('basis',\n                 ColumnTransformer(remainder='passthrough',\n                                   transformers=[('smooth',\n                                                  SplineTransformer(extrapolation='linear',\n                                                                    include_bias=False,\n                                                                    knots='quantile'),\n                                                  ['lag_1', 'lag_4', 'lag_96',\n                                                   'lag_672', 'roll_mean_4',\n                                                   'roll_std_4', 'roll_mean_96',\n                                                   'roll_max_96', 'diff_1'])],\n                                   verbose_feature_names_out=False)),\n                ('scaler', StandardScaler()),\n                ('regressor', LinearRegression())])"
+  },
+  "input_directory": "/Users/chelakawijesekara/Downloads/FDM/artifacts",
+  "input_sha256": {
+    "X_train.csv": "4ee1a97e9b5fdeeffff483ff59b0f0b9cd9badcf20b8f0efad816fa962e0a000",
+    "y_train.csv": "03d32e2abdf7c67d14785faa33c894849f92fa4be037d0a821e42b621f1d0bf6",
+    "X_test.csv": "0316930f682f4121942138efc63add25b3bf1217ca0fa08f1889dfb2a2a03992",
+    "y_test.csv": "e5211262e64eeb4598c985a4799f674ab71325789f0b5bebcfc3e6870d97db4b"
+  },
+  "versions": {
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "scikit-learn": "1.9.1",
+    "joblib": "1.6.0"
+  },
+  "limitations": [
+    "Forecasts are one interval ahead (15 minutes), with previous actual readings available before each prediction. This is not a day-ahead test.",
+    "load_level assumes the operating load category is known before the forecast interval; this must be confirmed with the team.",
+    "The supplied preprocessing shifts midnight rows to the next day; the original interval timestamp convention remains an assumption.",
+    "The supplied preprocessing interpolates the target at 2018-11-08 00:00 using a future reading. This affects that test target and later lag/rolling features. Test results describe those supplied artifacts, not a fully causal evaluation of raw measurements.",
+    "Upstream feature selection used the entire supplied training period, including September/October. Validation is provisional conditional on that fixed feature set; strict validation needs feature selection refitted on the earlier fitting period.",
+    "The preprocessing notebook already inspected the test persistence score and full-dataset EDA. Do not describe the test set as completely untouched."
+  ]
+}

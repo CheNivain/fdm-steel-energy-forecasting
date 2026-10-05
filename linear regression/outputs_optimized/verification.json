@@ -1,0 +1,28 @@
+{
+  "model_reload_predictions_match": true,
+  "metrics_recomputed_match": true,
+  "test_rows": 5857,
+  "input_features": [
+    "tod_sin",
+    "tod_cos",
+    "dow_sin",
+    "dow_cos",
+    "is_weekend",
+    "load_level",
+    "lag_1",
+    "lag_4",
+    "lag_96",
+    "lag_672",
+    "roll_mean_4",
+    "roll_std_4",
+    "roll_mean_96",
+    "roll_max_96",
+    "diff_1"
+  ],
+  "source_sha256": {
+    "src/optimized_regression.py": "a2aa2c0b315fb197b769ee519d6380bea7bb7ffee69bb6d1164a5d7de4334465",
+    "src/regression_common.py": "be633f1c53e50dc0e36bdd437fc74065e93b90b82427c929e4b228d87e0b7aec",
+    "linear regression/optimize.py": "e5381aa4c810cedb79c4185bf5a299c5de1004308cb3e6eaef72764962b1a01b"
+  },
+  "model_sha256": "79ee10d316d2a163bf652ea4bd787261e34bd558fbac9a98424b76e54e6aeaae"
+}

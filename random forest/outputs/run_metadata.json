@@ -1,0 +1,80 @@
+{
+  "status": "trained",
+  "created_utc": "2026-10-02T07:05:16.317532+00:00",
+  "target": "Usage_kWh",
+  "horizon_minutes": 15,
+  "features": [
+    "tod_sin",
+    "tod_cos",
+    "dow_sin",
+    "dow_cos",
+    "is_weekend",
+    "load_level",
+    "lag_1",
+    "lag_4",
+    "lag_96",
+    "lag_672",
+    "roll_mean_4",
+    "roll_std_4",
+    "roll_mean_96",
+    "roll_max_96",
+    "diff_1"
+  ],
+  "validation_start": "2018-09-01 00:00:00",
+  "test_start": "2018-11-01 00:00:00",
+  "selection_metric": "validation RMSE_kWh (lower is better)",
+  "settings": {
+    "algorithm": "Random Forest Regression",
+    "selected_parameters": {
+      "max_depth": 16,
+      "max_features": 0.7,
+      "min_samples_leaf": 4
+    },
+    "n_estimators": 200,
+    "random_state": 42,
+    "search_candidates": 8,
+    "search_fit_predict_seconds": 66.47336591396015,
+    "final_fit_seconds": 7.476771959103644
+  },
+  "model_parameters": {
+    "bootstrap": true,
+    "ccp_alpha": 0.0,
+    "criterion": "squared_error",
+    "max_depth": 16,
+    "max_features": 0.7,
+    "max_leaf_nodes": null,
+    "max_samples": null,
+    "min_impurity_decrease": 0.0,
+    "min_samples_leaf": 4,
+    "min_samples_split": 2,
+    "min_weight_fraction_leaf": 0.0,
+    "monotonic_cst": null,
+    "n_estimators": 200,
+    "n_jobs": 2,
+    "oob_score": false,
+    "random_state": 42,
+    "verbose": 0,
+    "warm_start": false
+  },
+  "input_directory": "/Users/chelakawijesekara/Downloads/FDM/artifacts",
+  "input_sha256": {
+    "X_train.csv": "4ee1a97e9b5fdeeffff483ff59b0f0b9cd9badcf20b8f0efad816fa962e0a000",
+    "y_train.csv": "03d32e2abdf7c67d14785faa33c894849f92fa4be037d0a821e42b621f1d0bf6",
+    "X_test.csv": "0316930f682f4121942138efc63add25b3bf1217ca0fa08f1889dfb2a2a03992",
+    "y_test.csv": "e5211262e64eeb4598c985a4799f674ab71325789f0b5bebcfc3e6870d97db4b"
+  },
+  "versions": {
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "scikit-learn": "1.9.1",
+    "joblib": "1.6.0"
+  },
+  "limitations": [
+    "Forecasts are one interval ahead (15 minutes), with previous actual readings available before each prediction. This is not a day-ahead test.",
+    "load_level assumes the operating load category is known before the forecast interval; this must be confirmed with the team.",
+    "The supplied preprocessing shifts midnight rows to the next day; the original interval timestamp convention remains an assumption.",
+    "The supplied preprocessing interpolates the target at 2018-11-08 00:00 using a future reading. This affects that test target and later lag/rolling features. Test results describe those supplied artifacts, not a fully causal evaluation of raw measurements.",
+    "Upstream feature selection used the entire supplied training period, including September/October. Validation is provisional conditional on that fixed feature set; strict validation needs feature selection refitted on the earlier fitting period.",
+    "The preprocessing notebook already inspected the test persistence score and full-dataset EDA. Do not describe the test set as completely untouched."
+  ]
+}

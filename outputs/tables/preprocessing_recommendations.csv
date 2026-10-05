@@ -1,0 +1,10 @@
+Area,Recommended next action
+Missing values / duplicates,No filling or duplicate removal needed for this file based on the checks.
+Timestamps,"Resolve midnight convention, then sort before creating lags or splitting."
+Outliers and zeros,Retain initially. Check plant context; peaks may be real and important.
+Calendar inputs,"Consider hour, weekday and month. Avoid redundant copies of equivalent time fields."
+Categorical inputs,Encode chosen categories. Only use Load_Type if known before prediction.
+Past usage,"After resolving timestamps, consider previous-interval and previous-day usage. Shift rolling features to exclude the target interval."
+Leakage,Exclude unavailable same-interval electrical measurements and CO2.
+Evaluation,Use common chronological train/validation/test periods for all team models. Fit learned transformations on training only.
+Model selection later,Compare Linear Regression and Random Forest with team models on validation MAE/RMSE/R2. Use the final test period once after selection.

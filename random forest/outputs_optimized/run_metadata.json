@@ -1,0 +1,120 @@
+{
+  "status": "trained",
+  "created_utc": "2026-10-02T07:25:09.292863+00:00",
+  "target": "Usage_kWh",
+  "horizon_minutes": 15,
+  "features": [
+    "tod_sin",
+    "tod_cos",
+    "dow_sin",
+    "dow_cos",
+    "is_weekend",
+    "load_level",
+    "lag_1",
+    "lag_4",
+    "lag_96",
+    "lag_672",
+    "roll_mean_4",
+    "roll_std_4",
+    "roll_mean_96",
+    "roll_max_96",
+    "diff_1"
+  ],
+  "validation_start": "2018-09-01 00:00:00",
+  "test_start": "2018-11-01 00:00:00",
+  "selection_metric": "validation RMSE_kWh (lower is better)",
+  "settings": {
+    "algorithm": "Random Forest Regression",
+    "learner": "RandomForestRegressor",
+    "selected_specification": {
+      "feature_mode": "context",
+      "max_depth": 12,
+      "max_features": 0.4,
+      "max_samples": null,
+      "min_samples_leaf": 1,
+      "min_samples_split": 10,
+      "n_estimators": 800
+    },
+    "selection_metric": "September-October validation RMSE_kWh",
+    "best_validation_RMSE_kWh": 9.128742009283737,
+    "test_used_for_selection": false,
+    "search_candidates": 46,
+    "postprocessing": "Predictions floored at zero for nonnegative energy consumption",
+    "raw_test_metrics": {
+      "model": "Random Forest Regression",
+      "split": "test_unclipped",
+      "n_rows": 5857,
+      "MAE_kWh": 3.839259859147324,
+      "RMSE_kWh": 8.082553318164663,
+      "R2": 0.9325994248144561
+    },
+    "negative_raw_test_predictions": 0,
+    "raw_input_features": 15,
+    "transformed_features": 24,
+    "final_fit_rows": 28511,
+    "final_fit_seconds": 13.245804667007178,
+    "total_seconds_before_export": 263.7897783749504,
+    "seed": 42,
+    "walk_forward_note": "Retrospective robustness diagnostics; configuration selected using later Sep-Oct data.",
+    "ablation_note": "Diagnostic only; not a replacement selection or proof load category is known in advance."
+  },
+  "model_parameters": {
+    "estimator__memory": null,
+    "estimator__steps": [
+      [
+        "features",
+        "ForecastFeatures(mode='context')"
+      ],
+      [
+        "regressor",
+        "RandomForestRegressor(max_depth=12, max_features=0.4, min_samples_split=10,\n                      n_estimators=800, n_jobs=4, random_state=42)"
+      ]
+    ],
+    "estimator__transform_input": null,
+    "estimator__verbose": false,
+    "estimator__features": "ForecastFeatures(mode='context')",
+    "estimator__regressor": "RandomForestRegressor(max_depth=12, max_features=0.4, min_samples_split=10,\n                      n_estimators=800, n_jobs=4, random_state=42)",
+    "estimator__features__mode": "context",
+    "estimator__features__use_load": true,
+    "estimator__regressor__bootstrap": true,
+    "estimator__regressor__ccp_alpha": 0.0,
+    "estimator__regressor__criterion": "squared_error",
+    "estimator__regressor__max_depth": 12,
+    "estimator__regressor__max_features": 0.4,
+    "estimator__regressor__max_leaf_nodes": null,
+    "estimator__regressor__max_samples": null,
+    "estimator__regressor__min_impurity_decrease": 0.0,
+    "estimator__regressor__min_samples_leaf": 1,
+    "estimator__regressor__min_samples_split": 10,
+    "estimator__regressor__min_weight_fraction_leaf": 0.0,
+    "estimator__regressor__monotonic_cst": null,
+    "estimator__regressor__n_estimators": 800,
+    "estimator__regressor__n_jobs": 4,
+    "estimator__regressor__oob_score": false,
+    "estimator__regressor__random_state": 42,
+    "estimator__regressor__verbose": 0,
+    "estimator__regressor__warm_start": false,
+    "estimator": "Pipeline(steps=[('features', ForecastFeatures(mode='context')),\n                ('regressor',\n                 RandomForestRegressor(max_depth=12, max_features=0.4,\n                                       min_samples_split=10, n_estimators=800,\n                                       n_jobs=4, random_state=42))])"
+  },
+  "input_directory": "/Users/chelakawijesekara/Downloads/FDM/artifacts",
+  "input_sha256": {
+    "X_train.csv": "4ee1a97e9b5fdeeffff483ff59b0f0b9cd9badcf20b8f0efad816fa962e0a000",
+    "y_train.csv": "03d32e2abdf7c67d14785faa33c894849f92fa4be037d0a821e42b621f1d0bf6",
+    "X_test.csv": "0316930f682f4121942138efc63add25b3bf1217ca0fa08f1889dfb2a2a03992",
+    "y_test.csv": "e5211262e64eeb4598c985a4799f674ab71325789f0b5bebcfc3e6870d97db4b"
+  },
+  "versions": {
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "scikit-learn": "1.9.1",
+    "joblib": "1.6.0"
+  },
+  "limitations": [
+    "Forecasts are one interval ahead (15 minutes), with previous actual readings available before each prediction. This is not a day-ahead test.",
+    "load_level assumes the operating load category is known before the forecast interval; this must be confirmed with the team.",
+    "The supplied preprocessing shifts midnight rows to the next day; the original interval timestamp convention remains an assumption.",
+    "The supplied preprocessing interpolates the target at 2018-11-08 00:00 using a future reading. This affects that test target and later lag/rolling features. Test results describe those supplied artifacts, not a fully causal evaluation of raw measurements.",
+    "Upstream feature selection used the entire supplied training period, including September/October. Validation is provisional conditional on that fixed feature set; strict validation needs feature selection refitted on the earlier fitting period.",
+    "The preprocessing notebook already inspected the test persistence score and full-dataset EDA. Do not describe the test set as completely untouched."
+  ]
+}

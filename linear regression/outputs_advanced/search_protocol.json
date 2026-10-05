@@ -1,0 +1,220 @@
+{
+  "algorithm": "Linear Regression",
+  "screen_candidates": 37,
+  "screen_folds": [
+    4,
+    5
+  ],
+  "selection": "mean of five TimeSeriesSplit fold RMSE values; lowest wins",
+  "n_splits": 5,
+  "random_state": 42,
+  "high_load_definition": "actual Usage_kWh >= 50",
+  "test_used_for_selection": false,
+  "test_previously_seen_in_project": true,
+  "input_feature_contract": [
+    "tod_sin",
+    "tod_cos",
+    "dow_sin",
+    "dow_cos",
+    "is_weekend",
+    "load_level",
+    "lag_1",
+    "lag_4",
+    "lag_96",
+    "lag_672",
+    "roll_mean_4",
+    "roll_std_4",
+    "roll_mean_96",
+    "roll_max_96",
+    "diff_1"
+  ],
+  "search_space": [
+    {
+      "previous": {
+        "feature_mode": "time96",
+        "basis": "spline",
+        "knots": 5
+      }
+    },
+    {
+      "schedule": "none",
+      "knots": 3,
+      "use_load": true
+    },
+    {
+      "schedule": "none",
+      "knots": 3,
+      "use_load": false
+    },
+    {
+      "schedule": "none",
+      "knots": 5,
+      "use_load": true
+    },
+    {
+      "schedule": "none",
+      "knots": 5,
+      "use_load": false
+    },
+    {
+      "schedule": "none",
+      "knots": 8,
+      "use_load": true
+    },
+    {
+      "schedule": "none",
+      "knots": 8,
+      "use_load": false
+    },
+    {
+      "schedule": "weekend",
+      "knots": 3,
+      "use_load": true
+    },
+    {
+      "schedule": "weekend",
+      "knots": 3,
+      "use_load": false
+    },
+    {
+      "schedule": "weekend",
+      "knots": 5,
+      "use_load": true
+    },
+    {
+      "schedule": "weekend",
+      "knots": 5,
+      "use_load": false
+    },
+    {
+      "schedule": "weekend",
+      "knots": 8,
+      "use_load": true
+    },
+    {
+      "schedule": "weekend",
+      "knots": 8,
+      "use_load": false
+    },
+    {
+      "schedule": "harmonics",
+      "knots": 3,
+      "use_load": true
+    },
+    {
+      "schedule": "harmonics",
+      "knots": 3,
+      "use_load": false
+    },
+    {
+      "schedule": "harmonics",
+      "knots": 5,
+      "use_load": true
+    },
+    {
+      "schedule": "harmonics",
+      "knots": 5,
+      "use_load": false
+    },
+    {
+      "schedule": "harmonics",
+      "knots": 8,
+      "use_load": true
+    },
+    {
+      "schedule": "harmonics",
+      "knots": 8,
+      "use_load": false
+    },
+    {
+      "schedule": "none",
+      "knots": 5,
+      "high_weight": 1.3
+    },
+    {
+      "schedule": "none",
+      "knots": 5,
+      "high_weight": 2.0
+    },
+    {
+      "schedule": "none",
+      "knots": 5,
+      "half_life_days": 60
+    },
+    {
+      "schedule": "none",
+      "knots": 5,
+      "half_life_days": 120
+    },
+    {
+      "schedule": "none",
+      "knots": 5,
+      "degree": 2
+    },
+    {
+      "schedule": "none",
+      "knots": 5,
+      "knot_spacing": "uniform"
+    },
+    {
+      "schedule": "weekend",
+      "knots": 5,
+      "high_weight": 1.3
+    },
+    {
+      "schedule": "weekend",
+      "knots": 5,
+      "high_weight": 2.0
+    },
+    {
+      "schedule": "weekend",
+      "knots": 5,
+      "half_life_days": 60
+    },
+    {
+      "schedule": "weekend",
+      "knots": 5,
+      "half_life_days": 120
+    },
+    {
+      "schedule": "weekend",
+      "knots": 5,
+      "degree": 2
+    },
+    {
+      "schedule": "weekend",
+      "knots": 5,
+      "knot_spacing": "uniform"
+    },
+    {
+      "schedule": "harmonics",
+      "knots": 5,
+      "high_weight": 1.3
+    },
+    {
+      "schedule": "harmonics",
+      "knots": 5,
+      "high_weight": 2.0
+    },
+    {
+      "schedule": "harmonics",
+      "knots": 5,
+      "half_life_days": 60
+    },
+    {
+      "schedule": "harmonics",
+      "knots": 5,
+      "half_life_days": 120
+    },
+    {
+      "schedule": "harmonics",
+      "knots": 5,
+      "degree": 2
+    },
+    {
+      "schedule": "harmonics",
+      "knots": 5,
+      "knot_spacing": "uniform"
+    }
+  ]
+}

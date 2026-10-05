@@ -1,0 +1,20 @@
+.venv/
+.cache/
+__pycache__/
+.ipynb_checkpoints/
+app_data/
+frontend/node_modules/
+frontend/.pnpm-store/
+tmp/app-qa/
+
+app_data/deployment/*.joblib
+random forest/outputs_advanced/*.joblib
+*.joblib
+
+.DS_Store
+tmp/
+output/
+app_data/
+*.joblib
+
+echo "*.zip" >> .gitignore

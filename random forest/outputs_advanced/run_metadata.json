@@ -1,0 +1,130 @@
+{
+  "status": "trained",
+  "created_utc": "2026-10-02T11:45:03.269987+00:00",
+  "target": "Usage_kWh",
+  "horizon_minutes": 15,
+  "features": [
+    "tod_sin",
+    "tod_cos",
+    "dow_sin",
+    "dow_cos",
+    "is_weekend",
+    "load_level",
+    "lag_1",
+    "lag_4",
+    "lag_96",
+    "lag_672",
+    "roll_mean_4",
+    "roll_std_4",
+    "roll_mean_96",
+    "roll_max_96",
+    "diff_1"
+  ],
+  "validation_start": "2018-02-26 13:15:00",
+  "test_start": "2018-11-01 00:00:00",
+  "selection_metric": "mean of five TimeSeriesSplit fold RMSE values; lowest wins",
+  "settings": {
+    "algorithm": "Random Forest Regression",
+    "selected_specification": {
+      "half_life_days": null,
+      "high_weight": 1.0,
+      "max_depth": null,
+      "max_features": 0.6,
+      "max_samples": null,
+      "min_samples_leaf": 2,
+      "min_samples_split": 2,
+      "n_estimators": 1000,
+      "schedule": "harmonics",
+      "target_mode": "delta",
+      "use_load": false
+    },
+    "selection_metric": "mean of five TimeSeriesSplit fold RMSE values; lowest wins",
+    "cv_RMSE_kWh": 9.641221192340932,
+    "cv_HighLoad_MAE": 11.994092784154068,
+    "test_used_for_selection": false,
+    "search_candidates": 62,
+    "screen_candidates": 53,
+    "full_cv_candidates": 9,
+    "raw_input_features": 15,
+    "transformed_features": 70,
+    "final_fit_rows": 28511,
+    "final_fit_seconds": 205.84766070800833,
+    "total_seconds_before_export": 2755.545449999976,
+    "validation_start": "2018-02-26 13:15:00",
+    "postprocessing": "Predictions floored at zero; included in saved model",
+    "target_mode": "delta",
+    "validation_note": "Non-nested CV used for tuning, not an unbiased independent estimate.",
+    "model_compression": 3,
+    "limitations": [
+      "Forecasts are one interval ahead (15 minutes), with previous actual readings available before each prediction. This is not a day-ahead test.",
+      "The selected transformer ignores load_level. It remains in the 15-column input schema, but no upcoming operating-load category is required.",
+      "The supplied preprocessing shifts midnight rows to the next day; the original interval timestamp convention remains an assumption.",
+      "The supplied preprocessing interpolates the target at 2018-11-08 00:00 using a future reading. This affects that test target and later lag/rolling features. Test results describe those supplied artifacts, not a fully causal evaluation of raw measurements.",
+      "Upstream feature selection used the entire supplied training period, including September/October. Validation is provisional conditional on that fixed feature set; strict validation needs feature selection refitted on the earlier fitting period.",
+      "The preprocessing notebook already inspected the test persistence score and full-dataset EDA. Do not describe the test set as completely untouched."
+    ]
+  },
+  "model_parameters": {
+    "estimator__memory": null,
+    "estimator__steps": [
+      [
+        "features",
+        "ScheduleFeatures(schedule='harmonics', use_load=False)"
+      ],
+      [
+        "regressor",
+        "RandomForestRegressor(max_features=0.6, min_samples_leaf=2, n_estimators=1000,\n                      n_jobs=4, random_state=42)"
+      ]
+    ],
+    "estimator__transform_input": null,
+    "estimator__verbose": false,
+    "estimator__features": "ScheduleFeatures(schedule='harmonics', use_load=False)",
+    "estimator__regressor": "RandomForestRegressor(max_features=0.6, min_samples_leaf=2, n_estimators=1000,\n                      n_jobs=4, random_state=42)",
+    "estimator__features__mode": "context",
+    "estimator__features__schedule": "harmonics",
+    "estimator__features__use_load": false,
+    "estimator__regressor__bootstrap": true,
+    "estimator__regressor__ccp_alpha": 0.0,
+    "estimator__regressor__criterion": "squared_error",
+    "estimator__regressor__max_depth": null,
+    "estimator__regressor__max_features": 0.6,
+    "estimator__regressor__max_leaf_nodes": null,
+    "estimator__regressor__max_samples": null,
+    "estimator__regressor__min_impurity_decrease": 0.0,
+    "estimator__regressor__min_samples_leaf": 2,
+    "estimator__regressor__min_samples_split": 2,
+    "estimator__regressor__min_weight_fraction_leaf": 0.0,
+    "estimator__regressor__monotonic_cst": null,
+    "estimator__regressor__n_estimators": 1000,
+    "estimator__regressor__n_jobs": 4,
+    "estimator__regressor__oob_score": false,
+    "estimator__regressor__random_state": 42,
+    "estimator__regressor__verbose": 0,
+    "estimator__regressor__warm_start": false,
+    "estimator": "Pipeline(steps=[('features',\n                 ScheduleFeatures(schedule='harmonics', use_load=False)),\n                ('regressor',\n                 RandomForestRegressor(max_features=0.6, min_samples_leaf=2,\n                                       n_estimators=1000, n_jobs=4,\n                                       random_state=42))])",
+    "half_life_days": null,
+    "high_weight": 1.0,
+    "target_mode": "delta"
+  },
+  "input_directory": "/Users/chelakawijesekara/Downloads/FDM/artifacts",
+  "input_sha256": {
+    "X_train.csv": "4ee1a97e9b5fdeeffff483ff59b0f0b9cd9badcf20b8f0efad816fa962e0a000",
+    "y_train.csv": "03d32e2abdf7c67d14785faa33c894849f92fa4be037d0a821e42b621f1d0bf6",
+    "X_test.csv": "0316930f682f4121942138efc63add25b3bf1217ca0fa08f1889dfb2a2a03992",
+    "y_test.csv": "e5211262e64eeb4598c985a4799f674ab71325789f0b5bebcfc3e6870d97db4b"
+  },
+  "versions": {
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "scikit-learn": "1.9.1",
+    "joblib": "1.6.0"
+  },
+  "limitations": [
+    "Forecasts are one interval ahead (15 minutes), with previous actual readings available before each prediction. This is not a day-ahead test.",
+    "The selected transformer ignores load_level. It remains in the 15-column input schema, but no upcoming operating-load category is required.",
+    "The supplied preprocessing shifts midnight rows to the next day; the original interval timestamp convention remains an assumption.",
+    "The supplied preprocessing interpolates the target at 2018-11-08 00:00 using a future reading. This affects that test target and later lag/rolling features. Test results describe those supplied artifacts, not a fully causal evaluation of raw measurements.",
+    "Upstream feature selection used the entire supplied training period, including September/October. Validation is provisional conditional on that fixed feature set; strict validation needs feature selection refitted on the earlier fitting period.",
+    "The preprocessing notebook already inspected the test persistence score and full-dataset EDA. Do not describe the test set as completely untouched."
+  ]
+}

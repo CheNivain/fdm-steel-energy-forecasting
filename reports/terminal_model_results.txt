@@ -1,0 +1,36 @@
+LINEAR REGRESSION
+Final model fit time (recorded): 1.05 s
+Engineered features: 651 (from 15 inputs)
+Test: 5,857 intervals | 2018-11-01 00:00:00 to 2019-01-01 00:00:00
+High-load test intervals: 1,491 (actual usage >= 50 kWh)
+
+                                      MAE   RMSE    R2  HighLoad_MAE
+Naive (last interval)               5.155 11.813 0.856        12.420
+Linear Regression (original)        6.297 10.975 0.876        12.070
+Previous optimized version          4.297  8.098 0.932         9.795
+Linear Regression (advanced, FINAL) 4.128  7.880 0.936         9.671
+
+RMSE improvement over naive: 33.3%
+Selection score: five-fold mean CV RMSE = 9.912 kWh
+
+RANDOM FOREST
+Final model fit time (recorded): 205.85 s
+Trees: 1000 | Maximum depth: None
+Test: 5,857 intervals | 2018-11-01 00:00:00 to 2019-01-01 00:00:00
+High-load test intervals: 1,491 (actual usage >= 50 kWh)
+
+                                    MAE   RMSE    R2  HighLoad_MAE
+Naive (last interval)             5.155 11.813 0.856        12.420
+Random Forest (original, 8-trial) 3.847  8.204 0.931         9.872
+Previous optimized version        3.839  8.083 0.933         9.667
+Random Forest (advanced, FINAL)   3.645  7.735 0.938         9.515
+
+RMSE improvement over naive: 34.5%
+Selection score: five-fold mean CV RMSE = 9.641 kWh
+
+MAE and RMSE are in kWh; R2 is not percentage accuracy.
+HighLoad_MAE: mean absolute error where actual Usage_kWh >= 50, matching the SVR notebook.
+This is an energy-usage threshold, not the Load_Type category or an electrical current measurement.
+Results use the supplied team preprocessing; documented assumptions still apply.
+Models were selected using validation/CV RMSE; the tables above report test results.
+Saved predictions and metrics verified. No models were retrained.

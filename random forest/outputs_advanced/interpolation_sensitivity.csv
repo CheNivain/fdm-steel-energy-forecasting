@@ -1,0 +1,2 @@
+model,split,n_rows,MAE_kWh,RMSE_kWh,R2,HighLoad_MAE,high_load_rows
+Selected configuration,exclude_interpolation_influence,5759,3.6308077682775104,7.718044342417299,0.9385341891177308,9.548005363869192,1453

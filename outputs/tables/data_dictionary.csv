@@ -1,0 +1,12 @@
+Column,Meaning,Forecasting role
+date,Interval timestamp as supplied,Parse day/month/year; check midnight ordering
+Usage_kWh,Energy consumed during the interval (kWh),"Target, not a same-interval input"
+Lagging_Current_Reactive.Power_kVarh,Lagging reactive energy (kVarh),Same-interval measurement: leakage risk
+Leading_Current_Reactive_Power_kVarh,Leading reactive energy (kVarh),Same-interval measurement: leakage risk
+CO2(tCO2),Recorded carbon dioxide emissions (tonnes),Same-interval measurement: leakage risk
+Lagging_Current_Power_Factor,Lagging power factor (percentage),Same-interval measurement: leakage risk
+Leading_Current_Power_Factor,Leading power factor (percentage),Same-interval measurement: leakage risk
+NSM,Seconds since midnight,Calendar/time feature; verify against date
+WeekStatus,Weekday or Weekend,Calendar feature known in advance
+Day_of_week,Named weekday,Calendar feature known in advance
+Load_Type,"Light_Load, Medium_Load or Maximum_Load",Use only if independently planned and known in advance

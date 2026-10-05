@@ -1,0 +1,13 @@
+{
+  "algorithm": "Linear Regression",
+  "learner": "LinearRegression",
+  "selected_specification": {
+    "feature_mode": "time96",
+    "basis": "spline",
+    "knots": 5
+  },
+  "selection_metric": "September-October validation RMSE_kWh",
+  "best_validation_RMSE_kWh": 9.295672183854313,
+  "test_used_for_selection": false,
+  "search_candidates": 18
+}

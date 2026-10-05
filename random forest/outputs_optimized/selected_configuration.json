@@ -1,0 +1,17 @@
+{
+  "algorithm": "Random Forest Regression",
+  "learner": "RandomForestRegressor",
+  "selected_specification": {
+    "feature_mode": "context",
+    "max_depth": 12,
+    "max_features": 0.4,
+    "max_samples": null,
+    "min_samples_leaf": 1,
+    "min_samples_split": 10,
+    "n_estimators": 800
+  },
+  "selection_metric": "September-October validation RMSE_kWh",
+  "best_validation_RMSE_kWh": 9.128742009283737,
+  "test_used_for_selection": false,
+  "search_candidates": 46
+}

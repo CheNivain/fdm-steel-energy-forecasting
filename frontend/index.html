@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#202626" />
+    <title>Steel Energy | Forecast Workspace</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="/styles.css" />
+    <script defer src="/vendor/lucide.js"></script>
+    <script defer src="/vendor/chart.js"></script>
+    <script defer src="/app.js"></script>
+    <script defer src="/rolling.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <aside class="sidebar">
+      <a href="#operations" class="brand"
+        ><span class="brand-icon"><i data-lucide="factory"></i></span
+        ><span>STEEL<span class="brand-sub">ENERGY</span></span></a
+      >
+      <div class="nav-caption">PLANT WORKSPACE</div>
+      <nav aria-label="Main navigation">
+        <a href="#operations" data-page="operations"><i data-lucide="activity"></i><span>Forecast</span></a>
+        <a href="#data" data-page="data"
+          ><i data-lucide="database"></i><span>Meter data</span></a
+        >
+        <a href="#history" data-page="history"
+          ><i data-lucide="history"></i><span>Forecast ledger</span></a
+        >
+        <a href="#evidence" data-page="evidence"
+          ><i data-lucide="chart-no-axes-combined"></i
+          ><span>Model evidence</span></a
+        >
+        <a href="#forecast" data-page="forecast"
+          ><i data-lucide="flask-conical"></i><span>Historical replay</span></a
+        >
+      </nav>
+      <div class="sidebar-foot">
+        <span class="tiny-label">DATA MINERS / IT3051</span>
+        <p>Steel industry<br />energy forecasting</p>
+        <span class="version">Local workspace · v2.0</span>
+      </div>
+    </aside>
+    <div class="workspace">
+      <header class="topbar">
+        <span
+          >Operations <span class="slash">/</span>
+          <strong>Energy forecasting</strong></span
+        ><span id="connection" class="status"
+          ><span class="dot pending"></span>Connecting</span
+        >
+      </header>
+      <main id="main" tabindex="-1">
+        <div id="fatal" class="error hidden" role="alert"></div>
+        <section id="page-operations" class="page hidden">
+          <div class="page-title"><div><h1>Energy forecast</h1><p id="ops-period">Loading plant history...</p></div><a class="button secondary" href="#data"><i data-lucide="upload"></i>Add actual readings</a></div>
+          <div class="ops-stats" id="ops-stats"></div>
+          <div class="ops-layout">
+            <section class="ops-controls">
+              <div class="section-heading"><h2>Forecast interval</h2><button type="button" id="ops-refresh" class="icon-button" title="Refresh workspace" aria-label="Refresh workspace"><i data-lucide="refresh-cw"></i></button></div>
+              <form id="ops-form">
+                <label for="ops-date">Date</label><input id="ops-date" type="date" required />
+                <div id="ops-weekdays" class="weekday-strip" aria-label="Upcoming days"></div>
+                <div class="form-pair"><div><label for="ops-time">Start time</label><input id="ops-time" type="time" step="900" required /></div><div><label for="ops-duration">Duration</label><select id="ops-duration"><option value="1">15 minutes</option><option value="2">30 minutes</option></select></div></div>
+                <label for="ops-threshold">Alert above (kWh / 15 min)</label><input id="ops-threshold" type="number" min="0.01" max="1000000" step="0.01" value="50" required />
+                <div id="ops-gap" class="field-note interval-summary"></div>
+                <button type="submit" id="ops-predict" class="button primary full"><i data-lucide="zap"></i>Generate forecast</button>
+                <div id="ops-error" class="error hidden" role="alert"></div>
+              </form>
+              <dl class="small-facts"><dt>Time zone</dt><dd>Plant local time</dd><dt>Meter connection</dt><dd>Manual uploads</dd><dt>Algorithm</dt><dd>Random Forest</dd></dl>
+              <p id="ops-training-summary" class="field-note"></p>
+            </section>
+            <section class="ops-output">
+              <div id="ops-result" aria-live="polite"><div class="ops-placeholder"><i data-lucide="chart-no-axes-combined"></i><h2>Next interval ready</h2><p id="ops-next-label">Waiting for meter history</p></div></div>
+              <div class="chart-heading"><div><h2>Recent consumption</h2><p id="ops-chart-caption"></p></div><div class="chart-key"><span><b class="key actual"></b>Measured</span><span><b class="key provisional"></b>Estimated</span></div></div>
+              <div class="chart-frame ops-chart"><canvas id="ops-chart" role="img" aria-label="Measured and estimated energy over recent intervals"></canvas></div>
+              <div class="chart-foot"><span>kWh / 15 minutes</span><span>Interval-end timestamps</span></div>
+              <div id="ops-quality" class="notice compact"></div>
+            </section>
+          </div>
+          <section class="ops-latest"><div class="section-heading"><h2>Latest forecasts</h2><a href="#history">Open ledger<i data-lucide="arrow-right"></i></a></div><div id="ops-recent-table"></div></section>
+        </section>
+        <section id="page-forecast" class="page">
+          <div class="page-title">
+            <div>
+              <span class="eyebrow">NEXT-INTERVAL OUTLOOK</span>
+              <h1>Historical replay</h1>
+              <p>Steel-industry electricity consumption, in kWh.</p>
+            </div>
+            <span class="tag neutral"
+              ><i data-lucide="clock-3"></i>15-minute horizon</span
+            >
+          </div>
+          <div class="notice" id="source-banner">
+            <i data-lucide="flask-conical"></i>
+            <div>
+              <strong>Historical demo</strong
+              ><span>2018 meter readings. No live factory connection.</span>
+            </div>
+            <a href="#data">Meter data<i data-lucide="arrow-up-right"></i></a>
+          </div>
+          <div class="forecast-layout">
+            <div class="forecast-controls">
+              <div class="section-heading">
+                <h2>Forecast inputs</h2>
+                <span class="step">01</span>
+              </div>
+              <form id="forecast-form">
+                <label for="dataset-select">Meter history</label
+                ><select id="dataset-select" required>
+                  <option value="">Loading datasets...</option>
+                </select>
+                <dl class="input-summary" id="input-summary">
+                  <dt>History</dt>
+                  <dd>Loading...</dd>
+                </dl>
+                <label for="threshold"
+                  >Alert threshold
+                  <span class="muted">kWh / interval</span></label
+                >
+                <input
+                  id="threshold"
+                  type="number"
+                  value="50"
+                  min="0.01"
+                  max="1000000"
+                  step="0.01"
+                  required
+                />
+                <p class="field-note">
+                  Operational alert setting. Evaluation uses a fixed 50 kWh
+                  cutoff.
+                </p>
+                <button
+                  class="button primary full"
+                  type="submit"
+                  id="forecast-button"
+                >
+                  <i data-lucide="zap"></i>Generate forecast
+                </button>
+                <div
+                  id="forecast-error"
+                  class="error hidden"
+                  role="alert"
+                ></div>
+              </form>
+              <div class="model-mini">
+                <span class="mini-icon"><i data-lucide="network"></i></span>
+                <div>
+                  <strong>Random Forest</strong>
+                  <p>1,000 trees · verified artifact</p>
+                </div>
+              </div>
+              <dl class="small-facts">
+                <dt>Input window</dt>
+                <dd>7 days</dd>
+                <dt>Upcoming load category</dt>
+                <dd>Not required</dd>
+                <dt>Time convention</dt>
+                <dd>Plant local time</dd>
+              </dl>
+            </div>
+            <div class="forecast-output">
+              <div class="section-heading">
+                <h2>Energy outlook</h2>
+                <span class="step">02</span>
+              </div>
+              <div id="forecast-result" aria-live="polite">
+                <div class="empty-result">
+                  <i data-lucide="gauge"></i>
+                  <div>
+                    <h3>Ready for a forecast</h3>
+                    <p>The next interval follows the last meter reading.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="chart-heading">
+                <div>
+                  <h3>Consumption timeline</h3>
+                  <p id="chart-subtitle">Last 24 hours of recorded energy</p>
+                </div>
+                <div class="chart-key">
+                  <span><b class="key actual"></b>Recorded</span
+                  ><span><b class="key forecast"></b>Forecast</span>
+                </div>
+              </div>
+              <div class="chart-frame">
+                <canvas
+                  id="forecast-chart"
+                  role="img"
+                  aria-label="Recent energy readings and the next interval forecast"
+                ></canvas>
+              </div>
+              <div class="chart-foot">
+                <span>kWh per 15-minute interval</span
+                ><span>Plant local time</span>
+              </div>
+              <div id="result-details"></div>
+            </div>
+          </div>
+          <section class="evidence-strip">
+            <div>
+              <span class="eyebrow">RECORDED TEST PERFORMANCE</span>
+              <h2>Evidence behind the forecast</h2>
+              <a href="#evidence"
+                >Full evaluation<i data-lucide="arrow-right"></i
+              ></a>
+            </div>
+            <div class="strip-stat">
+              <span>Average error</span><strong id="summary-mae">—</strong
+              ><small>MAE · kWh</small>
+            </div>
+            <div class="strip-stat">
+              <span>High-load error</span><strong id="summary-high">—</strong
+              ><small>Actual usage ≥ 50 kWh</small>
+            </div>
+            <div class="strip-stat">
+              <span>Improvement over naive</span
+              ><strong id="summary-improvement">—</strong
+              ><small>Lower RMSE on legacy test</small>
+            </div>
+          </section>
+          <p class="footnote">
+            <i data-lucide="info"></i>Decision support only. Historical average
+            errors are not confidence intervals or guaranteed savings.
+          </p>
+        </section>
+        <section id="page-data" class="page hidden">
+          <div class="page-title">
+            <div>
+              <span class="eyebrow">INPUT QUALITY</span>
+              <h1>Meter data</h1>
+              <p>
+                Energy consumed in each 15-minute interval, not cumulative meter
+                totals.
+              </p>
+            </div>
+            <a class="button secondary" href="/api/template.csv" download
+              ><i data-lucide="download"></i>Replay sample CSV</a
+            >
+          </div>
+          <section class="actual-section">
+            <div class="section-heading"><div><h2>Factory actual readings</h2><p id="actuals-through">Loading latest measurement...</p></div><a class="icon-button" href="/api/workspace/actuals/export.csv" title="Export actual readings" aria-label="Export actual readings"><i data-lucide="download"></i></a></div>
+            <div class="actual-grid">
+              <form id="actual-upload-form">
+                <h3>Upload a day or month</h3>
+                <label for="actual-file">Actual readings CSV</label><input id="actual-file" type="file" accept=".csv,text/csv" required />
+                <p class="field-note">1–40,000 readings · up to 8 MB · interval-end timestamps</p>
+                <div class="schema"><code>timestamp,Usage_kWh<br />2019-01-01 00:15:00,ACTUAL_VALUE</code></div>
+                <label class="checkbox-label"><input id="actual-replace" type="checkbox" />Correct existing verified readings</label>
+                <div class="actions"><button type="submit" id="actual-upload-button" class="button primary"><i data-lucide="upload"></i>Import actuals</button><a href="/api/workspace/template.csv" download>CSV template</a></div>
+                <div id="actual-upload-error" class="error hidden" role="alert"></div><div id="actual-upload-success" class="success hidden" role="status"></div>
+              </form>
+              <form id="actual-reading-form">
+                <h3>Add one meter reading</h3>
+                <label for="actual-timestamp">Interval end</label><input id="actual-timestamp" type="datetime-local" step="900" required />
+                <label for="actual-value">Energy used (kWh)</label><input id="actual-value" type="number" min="0" max="1000000" step="any" required />
+                <button type="submit" id="actual-save" class="button secondary"><i data-lucide="plus"></i>Save actual reading</button>
+                <div id="actual-reading-error" class="error hidden" role="alert"></div>
+              </form>
+            </div>
+            <div class="training-row"><div><h3>Update model from actual readings</h3><p id="refit-status">Loading model status...</p><p class="field-note">Fixed selected settings. A refit is not a new accuracy evaluation.</p></div><button id="refit-button" class="button secondary"><i data-lucide="refresh-cw"></i>Refit Random Forest</button></div>
+            <div id="refit-error" class="error hidden" role="alert"></div>
+            <details class="import-log"><summary>Recent actual imports</summary><div id="actual-imports"></div></details>
+          </section>
+          <div class="data-layout">
+            <section class="import-section">
+              <div class="section-heading">
+                <h2>Separate historical replay dataset</h2>
+                <i data-lucide="upload"></i>
+              </div>
+              <form id="upload-form">
+                <label for="csv-file">Meter readings CSV</label
+                ><input
+                  id="csv-file"
+                  type="file"
+                  accept=".csv,text/csv"
+                  required
+                />
+                <p class="field-note">
+                  UTF-8 · up to 8 MB · 672–40,000 consecutive readings
+                </p>
+                <label for="convention">Timestamp convention</label
+                ><select id="convention">
+                  <option value="iso">
+                    ISO local timestamps (recommended)
+                  </option>
+                  <option value="uci">
+                    Original UCI date labels (midnight +1 day)
+                  </option>
+                </select>
+                <div class="schema">
+                  <code id="csv-schema"
+                    >timestamp,Usage_kWh<br />2018-11-12 10:00:00,42.7</code
+                  >
+                </div>
+                <button type="submit" class="button primary" id="upload-button">
+                  <i data-lucide="upload"></i>Validate & import
+                </button>
+                <div id="upload-error" class="error hidden" role="alert"></div>
+                <div
+                  id="upload-success"
+                  class="success hidden"
+                  role="status"
+                ></div>
+              </form>
+            </section>
+            <section class="requirements-section">
+              <h2>Data requirements</h2>
+              <ul class="check-list">
+                <li>
+                  <i data-lucide="check"></i>At least seven days, oldest reading
+                  first
+                </li>
+                <li>
+                  <i data-lucide="check"></i>One nonnegative kWh reading every
+                  15 minutes
+                </li>
+                <li>
+                  <i data-lucide="check"></i>No gaps, duplicated timestamps or
+                  missing readings
+                </li>
+                <li>
+                  <i data-lucide="check"></i>Local plant time, without timezone
+                  suffixes
+                </li>
+              </ul>
+              <div class="notice compact">
+                <i data-lucide="shield-check"></i>
+                <div>
+                  <strong>Stored on this computer</strong
+                  ><span
+                    >Imports and forecasts remain in the local project
+                    database.</span
+                  >
+                </div>
+              </div>
+              <p class="field-note">
+                ISO dates are used literally. Original UCI midnight labels
+                follow the team's documented +1 day assumption. Missing
+                measurements are never filled using future readings.
+              </p>
+            </section>
+          </div>
+          <div class="section-heading">
+            <h2>Available datasets</h2>
+            <span id="dataset-count" class="muted"></span>
+          </div>
+          <div id="dataset-list"></div>
+          <section id="append-section" class="append-section hidden">
+            <div>
+              <h2>Add the next actual reading</h2>
+              <p id="append-name"></p>
+            </div>
+            <form id="append-form">
+              <div>
+                <label for="append-timestamp">Reading timestamp</label
+                ><input id="append-timestamp" readonly />
+              </div>
+              <div>
+                <label for="append-value">Actual usage (kWh)</label
+                ><input
+                  id="append-value"
+                  type="number"
+                  min="0"
+                  max="1000000"
+                  step="any"
+                  required
+                />
+              </div>
+              <button type="submit" class="button primary">
+                <i data-lucide="plus"></i>Add reading
+              </button>
+            </form>
+            <div id="append-error" class="error hidden" role="alert"></div>
+          </section>
+        </section>
+        <section id="page-history" class="page hidden">
+          <div class="page-title">
+            <div>
+              <span class="eyebrow">AUDIT TRAIL</span>
+              <h1>Forecast ledger</h1>
+              <p>Issued predictions and the actual readings received later.</p>
+            </div>
+            <a
+              class="button secondary"
+              href="/api/workspace/forecasts/export.csv"
+              download
+              ><i data-lucide="download"></i>Export CSV</a
+            >
+          </div>
+          <div id="rolling-scores" class="ops-stats"></div>
+          <div class="toolbar"><label class="search"><i data-lucide="search"></i><input id="rolling-search" type="search" placeholder="Filter by forecast date" aria-label="Filter rolling forecasts by date" /></label><select id="rolling-filter" aria-label="Filter rolling forecasts"><option value="all">All intervals</option><option value="matched">Actual received</option><option value="pending">Awaiting actual</option><option value="requested">Requested intervals</option><option value="high">Above alert threshold</option></select><button id="rolling-refresh" class="icon-button" title="Refresh forecast ledger" aria-label="Refresh forecast ledger"><i data-lucide="refresh-cw"></i></button></div>
+          <p id="rolling-count" class="field-note"></p>
+          <div id="rolling-ledger"></div><div id="rolling-detail"></div>
+          <p class="field-note">Comparison uses the first issued forecast for each interval, with a fixed 50 kWh high-load cutoff. Dates in 2019 represent a historical scenario; no live factory connection is present.</p>
+          <details class="legacy-history"><summary>Historical replay records</summary>
+          <div class="toolbar">
+            <label class="search"
+              ><i data-lucide="search"></i
+              ><input
+                id="history-search"
+                type="search"
+                placeholder="Search source or forecast date"
+                aria-label="Search forecast history" /></label
+            ><select id="history-filter" aria-label="Filter forecast history">
+              <option value="all">All forecasts</option>
+              <option value="high">At / above alert threshold</option>
+              <option value="uploaded">Uploaded data</option>
+              <option value="historical_demo">Historical demos</option></select
+            ><button
+              id="refresh-history"
+              class="icon-button"
+              title="Refresh history"
+              aria-label="Refresh history"
+            >
+              <i data-lucide="refresh-cw"></i>
+            </button>
+          </div>
+          <div id="history-list"></div>
+          <div id="history-detail"></div>
+          <a href="/api/forecasts/export.csv" download>Export replay records</a>
+          </details>
+        </section>
+        <section id="page-evidence" class="page hidden">
+          <div class="page-title">
+            <div>
+              <span class="eyebrow">MODEL & EVALUATION</span>
+              <h1>Model evidence</h1>
+              <p>
+                Random Forest selected by the team for the final application.
+              </p>
+            </div>
+            <a
+              class="button secondary"
+              href="/api/evaluation/export.csv"
+              download
+              ><i data-lucide="download"></i>Test predictions</a
+            >
+          </div>
+          <div id="deployment-evidence" class="notice"><i data-lucide="info"></i><div><strong>Development evaluation</strong><span>These recorded scores belong to the earlier model, before the full-year deployment refit.</span></div></div>
+          <div id="evidence-metrics" class="metric-grid"></div>
+          <div class="evidence-meta" id="evidence-meta"></div>
+          <section class="evaluation-section">
+            <div class="section-heading">
+              <div>
+                <h2>Historical test replay</h2>
+                <p>
+                  Saved one-step predictions, each using earlier actual
+                  readings.
+                </p>
+              </div>
+              <label class="date-control"
+                >Test date<input
+                  id="evaluation-date"
+                  type="date"
+                  value="2018-11-19"
+                  min="2018-11-01"
+                  max="2018-12-31"
+              /></label>
+            </div>
+            <div class="chart-frame evaluation-chart">
+              <canvas
+                id="evaluation-chart"
+                role="img"
+                aria-label="Actual, Random Forest and naive predictions for a historical test day"
+              ></canvas>
+            </div>
+            <div id="day-scores" class="day-scores"></div>
+            <div id="evaluation-error" class="error hidden" role="alert"></div>
+          </section>
+          <section class="comparison-section">
+            <div class="section-heading">
+              <div>
+                <h2>Five-model results</h2>
+                <p>
+                  Reported final results. Lower MAE and RMSE are better; higher
+                  R² is better.
+                </p>
+              </div>
+              <a
+                class="icon-button"
+                href="/api/metrics/export.csv"
+                download
+                aria-label="Download model comparison"
+                title="Download model comparison"
+                ><i data-lucide="download"></i
+              ></a>
+            </div>
+            <div id="comparison-table"></div>
+            <div class="notice warning">
+              <i data-lucide="triangle-alert"></i>
+              <div>
+                <strong>Not a fair five-way ranking yet</strong
+                ><span
+                  >KNN and Gradient Boosting use different test samples and
+                  high-load cutoffs. Their errors cannot establish a winner
+                  against the other three. A common test and cutoff are still
+                  required.</span
+                >
+              </div>
+            </div>
+          </section>
+          <div class="model-layout">
+            <section>
+              <h2>Why this model?</h2>
+              <p>
+                Random Forest combines 1,000 decision trees to forecast
+                near-term energy use. It captures changing daily patterns and
+                interactions between recent readings.
+              </p>
+              <p>
+                On the team's 50 kWh evaluation, it has a lower reported
+                high-load error than Linear Regression and SVR. It is the team's
+                deployment choice, not a proven winner over every model.
+              </p>
+              <h3>Why watch high-load error?</h3>
+              <p>
+                Errors during energy-intensive periods may matter more for
+                operational planning. The team's priority is therefore error on
+                intervals where actual usage is at least 50 kWh. This does not
+                prove financial savings or capture every missed peak.
+              </p>
+              <p class="field-note">
+                Training candidates were selected by five-fold RMSE, not by
+                HighLoad_MAE. All four evaluation metrics remain visible.
+              </p>
+            </section>
+            <section>
+              <h2>Development model configuration</h2>
+              <dl id="model-settings" class="settings-list"></dl>
+              <h3>Most-used features</h3>
+              <div id="feature-bars"></div>
+              <p class="field-note">
+                Tree impurity importance, not causation. Correlated features can
+                share importance.
+              </p>
+            </section>
+          </div>
+          <section class="limitations-section">
+            <h2>Scope & limitations</h2>
+            <div id="limitations"></div>
+            <details>
+              <summary>Model identity & reproducibility</summary>
+              <div id="model-identity"></div>
+              <a href="/api/openapi.json" target="_blank" rel="noreferrer"
+                >API schema<i data-lucide="arrow-up-right"></i
+              ></a>
+            </details>
+          </section>
+        </section>
+        <footer>
+          Data Miners <span>IT3051 · Final project system</span
+          ><span>Local research prototype · Not a safety control</span>
+        </footer>
+      </main>
+    </div>
+    <div id="toast" role="status" aria-live="polite" class="toast hidden"></div>
+    <dialog id="confirm-dialog">
+      <form method="dialog">
+        <h2>Remove this dataset?</h2>
+        <p>
+          Its saved forecasts remain in the audit history. This removes the
+          imported readings from this workspace.
+        </p>
+        <div class="dialog-actions">
+          <button class="button secondary" value="cancel">Cancel</button
+          ><button class="button danger" value="confirm">Remove dataset</button>
+        </div>
+      </form>
+    </dialog>
+  </body>
+</html>

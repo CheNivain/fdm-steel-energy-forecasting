@@ -1,0 +1,16 @@
+{
+  "name": "steel-energy-console",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Local browser assets; the app itself is served by FastAPI",
+  "scripts": {
+    "vendor": "node vendor.mjs"
+  },
+  "dependencies": {
+    "chart.js": "4.5.1",
+    "lucide": "1.8.0"
+  },
+  "devDependencies": {
+    "prettier": "3.6.2"
+  }
+}

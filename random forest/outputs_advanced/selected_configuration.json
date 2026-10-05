@@ -1,0 +1,20 @@
+{
+  "algorithm": "Random Forest Regression",
+  "selected_specification": {
+    "half_life_days": null,
+    "high_weight": 1.0,
+    "max_depth": null,
+    "max_features": 0.6,
+    "max_samples": null,
+    "min_samples_leaf": 2,
+    "min_samples_split": 2,
+    "n_estimators": 1000,
+    "schedule": "harmonics",
+    "target_mode": "delta",
+    "use_load": false
+  },
+  "selection_metric": "mean of five TimeSeriesSplit fold RMSE values; lowest wins",
+  "cv_RMSE_kWh": 9.641221192340932,
+  "cv_HighLoad_MAE": 11.994092784154068,
+  "test_used_for_selection": false
+}
